@@ -18,7 +18,7 @@ CONFERENCE_ANNOUNCEMENT = 'Welcome to the conferencing bridge.'
 
 # Enable this to have the ability to add people to a conference by calling a
 # PSTN number. 
-ALLOW_OUTBOUND_PSTN = False
+ALLOW_OUTBOUND_PSTN = True
 
 # Enable this to attach an incoming number to every ad-hoc conference created.
 # Be careful with this flag. Turning this to True will result in renting a new number
