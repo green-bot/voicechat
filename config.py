@@ -23,7 +23,7 @@ ALLOW_OUTBOUND_PSTN = False
 # Enable this to attach an incoming number to every ad-hoc conference created.
 # Be careful with this flag. Turning this to True will result in renting a new number
 # with every conference created from this app.
-ALLOW_INBOUND_DID = False
+ALLOW_INBOUND_DID = True
 
 # Expire a conference in 24 hours when this flag is enabled.
 EXPIRE_CONFERENCE = not ALLOW_INBOUND_DID
