@@ -11,10 +11,10 @@ PLIVO_CALLER_ID = os.environ.get('PLIVO_CALLER_ID', '')
 HOLD_MUSIC = 'https://s3.amazonaws.com/plivocloud/music.mp3'
 
 # Wait announcement message when there is only 1 participant in the conference
-CONFERENCE_WAIT_ANNOUNCEMENT = "You are currently alone in the conference. Please wait. Thank you."
+CONFERENCE_WAIT_ANNOUNCEMENT = "Please wait for our agent to join. Thank you."
 
 # Announcement message before entering the conference
-CONFERENCE_ANNOUNCEMENT = 'Welcome to the conferencing bridge.'
+CONFERENCE_ANNOUNCEMENT = 'Welcome to tendigit support.'
 
 # Enable this to have the ability to add people to a conference by calling a
 # PSTN number. 
