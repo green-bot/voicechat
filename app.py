@@ -28,16 +28,16 @@ def index():
     """
     Returns the landing page.
     """
-    return render_template('home.html')
+    return render_template('index.html')
 
 
-@app.route("/create/")
-@basic_auth.required
-def create():
-    """
-    Creates a conference room and redirects to the page.
-    """
-    return render_template('create.html')
+# @app.route("/create/")
+# @basic_auth.required
+# def create():
+    # """
+    # Creates a conference room and redirects to the page.
+    # """
+    # return render_template('create.html')
 
 
 @app.route('/response/conf/music/', methods=['GET', 'POST'])
@@ -92,38 +92,38 @@ def conf(conference_name):
     return response
 
 
-@app.route('/<conference_name>/', methods=['GET'])
-@basic_auth.required
-def conference(conference_name):
-    """
-    Returns the HTML page for a particular conference name. The HTML page
-    uses the Plivo WebSDK to register to Plivo and make calls.
-    """
+# @app.route('/<conference_name>/', methods=['GET'])
+# @basic_auth.required
+# def conference(conference_name):
+    # """
+    # Returns the HTML page for a particular conference name. The HTML page
+    # uses the Plivo WebSDK to register to Plivo and make calls.
+    # """
 
-    if conference_exists(conference_name):
-        redis_conn = get_redis_connection()
-        endpoint_username = redis_conn.hget(conference_name, 'username')
-        endpoint_password = redis_conn.hget(conference_name, 'password')
-        inbound_did = redis_conn.hget(conference_name, 'inbound_did')
+    # if conference_exists(conference_name):
+        # redis_conn = get_redis_connection()
+        # endpoint_username = redis_conn.hget(conference_name, 'username')
+        # endpoint_password = redis_conn.hget(conference_name, 'password')
+        # inbound_did = redis_conn.hget(conference_name, 'inbound_did')
 
-        conference_url = url_for('conference', _external=True, conference_name=conference_name)
+        # conference_url = url_for('conference', _external=True, conference_name=conference_name)
 
-        data = {
-                'endpoint_username': endpoint_username,
-                'endpoint_password': endpoint_password,
-                'inbound_did': inbound_did,
-                'conference_name': conference_name,
-                'conference_url': conference_url,
-                }
+        # data = {
+                # 'endpoint_username': endpoint_username,
+                # 'endpoint_password': endpoint_password,
+                # 'inbound_did': inbound_did,
+                # 'conference_name': conference_name,
+                # 'conference_url': conference_url,
+                # }
 
-        if request.query_string == 'share':
-            template_name = 'conference_share.html'
-        else:
-            template_name = 'conference.html'
+        # if request.query_string == 'share':
+            # template_name = 'conference_share.html'
+        # else:
+            # template_name = 'conference.html'
 
-        response = make_response(render_template(template_name, response=data))
-        return response
-    return render_template('404.html')
+        # response = make_response(render_template(template_name, response=data))
+        # return response
+    # return render_template('404.html')
 
 
 @app.route('/api/v1/conference/', methods=['POST'])
@@ -248,13 +248,7 @@ def attach_inbound_did(app_id):
     except Exception as e:
         return None
 
-def token_good(request):
-  return request.headers.get('token') == config.TOKEN
-  
-
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
-
-

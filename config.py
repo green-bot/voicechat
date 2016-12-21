@@ -1,9 +1,10 @@
 import os
 
-# Plivo Auth ID and Auth Token
+# Basic Auth Username and Password
 BASIC_AUTH_USERNAME = os.environ.get('BASIC_AUTH_USERNAME')
 BASIC_AUTH_PASSWORD = os.environ.get('BASIC_AUTH_PASSWORD')
 
+# Plivo Auth ID and Auth Token
 PLIVO_AUTH_ID = os.environ.get('PLIVO_AUTH_ID')
 PLIVO_AUTH_TOKEN = os.environ.get('PLIVO_AUTH_TOKEN')
 
@@ -26,7 +27,7 @@ ALLOW_OUTBOUND_PSTN = True
 # Enable this to attach an incoming number to every ad-hoc conference created.
 # Be careful with this flag. Turning this to True will result in renting a new number
 # with every conference created from this app.
-ALLOW_INBOUND_DID = True
+ALLOW_INBOUND_DID = False
 
 # Expire a conference in 24 hours when this flag is enabled.
 EXPIRE_CONFERENCE = not ALLOW_INBOUND_DID
