@@ -13,34 +13,17 @@ from flask import Flask, render_template, request, url_for, make_response, jsoni
 import plivo
 import config
 from utils import get_redis_connection, get_plivo_connection, tinyid
-from functools import wraps
+from flask_basicauth import BasicAuth
 
 app = Flask(__name__)
 
-def check_auth(username, password):
-    """This function is called to check if a username /
-    password combination is valid.
-    """
-    return username == 'aram' and password == 'secret'
+app.config['BASIC_AUTH_USERNAME'] = config.BASIC_AUTH_USERNAME
+app.config['BASIC_AUTH_PASSWORD'] = config.BASIC_AUTH_PASSWORD 
 
-def authenticate():
-    """Sends a 401 response that enables basic auth"""
-    return Response(
-    'Could not verify your access level for that URL.\n'
-    'You have to login with proper credentials', 401,
-    {'WWW-Authenticate': 'Basic realm="Login Required"'})
-
-def requires_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        auth = request.authorization
-        if not auth or not check_auth(auth.username, auth.password):
-            return authenticate()
-        return f(*args, **kwargs)
-    return decorated
+basic_auth = BasicAuth(app)
 
 @app.route("/")
-@requires_auth
+@basic_auth.required
 def index():
     """
     Returns the landing page.
@@ -49,7 +32,7 @@ def index():
 
 
 @app.route("/create/")
-@requires_auth
+@basic_auth.required
 def create():
     """
     Creates a conference room and redirects to the page.
@@ -58,7 +41,7 @@ def create():
 
 
 @app.route('/response/conf/music/', methods=['GET', 'POST'])
-@requires_auth
+@basic_auth.required
 def conf_music():
     """
     Renders the XML to be used for hold music in the conference.
@@ -76,7 +59,7 @@ def conf_music():
 
 
 @app.route('/response/conf/<conference_name>/', methods=['GET', 'POST'])
-@requires_auth
+@basic_auth.required
 def conf(conference_name):
     """
     Renders the XML to start a conference based on the conference name
@@ -112,7 +95,7 @@ def conf(conference_name):
 
 
 @app.route('/<conference_name>/', methods=['GET'])
-@requires_auth
+@basic_auth.required
 def conference(conference_name):
     """
     Returns the HTML page for a particular conference name. The HTML page
@@ -146,7 +129,7 @@ def conference(conference_name):
 
 
 @app.route('/api/v1/conference/', methods=['POST'])
-@requires_auth
+@basic_auth.required
 def conference_api():
     """
     1. Create a conference name
@@ -165,7 +148,7 @@ def conference_api():
 
 
 @app.route('/api/v1/conference/<conference_name>/', methods=['POST'])
-@requires_auth
+@basic_auth.required
 def conference_call_api(conference_name):
     """
     Parameters -
