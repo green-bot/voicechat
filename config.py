@@ -1,7 +1,9 @@
 import os
 
 # Plivo Auth ID and Auth Token
-TOKEN = os.environ.get('TOKEN')
+BASIC_AUTH_USERNAME = os.environ.get('BASIC_AUTH_USERNAME')
+BASIC_AUTH_PASSWORD = os.environ.get('BASIC_AUTH_PASSWORD')
+
 PLIVO_AUTH_ID = os.environ.get('PLIVO_AUTH_ID')
 PLIVO_AUTH_TOKEN = os.environ.get('PLIVO_AUTH_TOKEN')
 
