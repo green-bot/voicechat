@@ -13,12 +13,35 @@ from flask import Flask, render_template, request, url_for, make_response, jsoni
 import plivo
 import config
 from utils import get_redis_connection, get_plivo_connection, tinyid
+from functools import wraps
 
 app = Flask(__name__)
 
+def check_auth(username, password):
+    """This function is called to check if a username /
+    password combination is valid.
+    """
+    return username == 'aram' and password == 'secret'
+
+def authenticate():
+    """Sends a 401 response that enables basic auth"""
+    return Response(
+    'Could not verify your access level for that URL.\n'
+    'You have to login with proper credentials', 401,
+    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    return decorated
+
 @app.route("/")
+@requires_auth
 def index():
-    if not token_good(request): return
     """
     Returns the landing page.
     """
@@ -26,8 +49,8 @@ def index():
 
 
 @app.route("/create/")
+@requires_auth
 def create():
-    if not token_good(request): return
     """
     Creates a conference room and redirects to the page.
     """
@@ -35,8 +58,8 @@ def create():
 
 
 @app.route('/response/conf/music/', methods=['GET', 'POST'])
+@requires_auth
 def conf_music():
-    if not token_good(request): return
     """
     Renders the XML to be used for hold music in the conference.
     This XML will be executed by Plivo when there is only 1
@@ -53,8 +76,8 @@ def conf_music():
 
 
 @app.route('/response/conf/<conference_name>/', methods=['GET', 'POST'])
+@requires_auth
 def conf(conference_name):
-    if not token_good(request): return
     """
     Renders the XML to start a conference based on the conference name
     it receives. It checks if the conference exists in our memory (to make
@@ -89,8 +112,8 @@ def conf(conference_name):
 
 
 @app.route('/<conference_name>/', methods=['GET'])
+@requires_auth
 def conference(conference_name):
-    if not token_good(request): return
     """
     Returns the HTML page for a particular conference name. The HTML page
     uses the Plivo WebSDK to register to Plivo and make calls.
@@ -123,8 +146,8 @@ def conference(conference_name):
 
 
 @app.route('/api/v1/conference/', methods=['POST'])
+@requires_auth
 def conference_api():
-    if not token_good(request): return
     """
     1. Create a conference name
     2. Create an endpoint and store in redis with conference name
@@ -142,8 +165,8 @@ def conference_api():
 
 
 @app.route('/api/v1/conference/<conference_name>/', methods=['POST'])
+@requires_auth
 def conference_call_api(conference_name):
-    if not token_good(request): return
     """
     Parameters -
     to : The number to be called.
