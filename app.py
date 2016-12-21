@@ -1,3 +1,4 @@
+our_magic_token = 'adfhakjdhfkajdhfkjahdfkadfa1232'
 # -*- coding: utf-8 -*-
 """
     Implements ad-hoc conferences using Plivo.
@@ -17,6 +18,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    if not token_good(): return
     """
     Returns the landing page.
     """
@@ -25,6 +27,7 @@ def index():
 
 @app.route("/create/")
 def create():
+    if not token_good(): return
     """
     Creates a conference room and redirects to the page.
     """
@@ -33,6 +36,7 @@ def create():
 
 @app.route('/response/conf/music/', methods=['GET', 'POST'])
 def conf_music():
+    if not token_good(): return
     """
     Renders the XML to be used for hold music in the conference.
     This XML will be executed by Plivo when there is only 1
@@ -50,6 +54,7 @@ def conf_music():
 
 @app.route('/response/conf/<conference_name>/', methods=['GET', 'POST'])
 def conf(conference_name):
+    if not token_good(): return
     """
     Renders the XML to start a conference based on the conference name
     it receives. It checks if the conference exists in our memory (to make
@@ -85,6 +90,7 @@ def conf(conference_name):
 
 @app.route('/<conference_name>/', methods=['GET'])
 def conference(conference_name):
+    if not token_good(): return
     """
     Returns the HTML page for a particular conference name. The HTML page
     uses the Plivo WebSDK to register to Plivo and make calls.
@@ -118,6 +124,7 @@ def conference(conference_name):
 
 @app.route('/api/v1/conference/', methods=['POST'])
 def conference_api():
+    if not token_good(): return
     """
     1. Create a conference name
     2. Create an endpoint and store in redis with conference name
@@ -136,6 +143,7 @@ def conference_api():
 
 @app.route('/api/v1/conference/<conference_name>/', methods=['POST'])
 def conference_call_api(conference_name):
+    if not token_good(): return
     """
     Parameters -
     to : The number to be called.
@@ -235,6 +243,10 @@ def attach_inbound_did(app_id):
         return number_rented
     except Exception as e:
         return None
+
+def token_good(request)
+  return request.headers.get('token') == config.TOKEN
+  
 
 
 if __name__ == '__main__':
