@@ -41,7 +41,6 @@ def create():
 
 
 @app.route('/response/conf/music/', methods=['GET', 'POST'])
-@basic_auth.required
 def conf_music():
     """
     Renders the XML to be used for hold music in the conference.
@@ -59,7 +58,6 @@ def conf_music():
 
 
 @app.route('/response/conf/<conference_name>/', methods=['GET', 'POST'])
-@basic_auth.required
 def conf(conference_name):
     """
     Renders the XML to start a conference based on the conference name
