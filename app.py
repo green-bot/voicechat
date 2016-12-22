@@ -156,6 +156,7 @@ def conference_call_api(conference_name):
     1. Make an outbound call
     2. Put the call in the conference
     """
+    print 'request: %s' % request
     if not config.ALLOW_OUTBOUND_PSTN:
         return jsonify(success=False, message='Calls are disabled')
 
@@ -164,8 +165,8 @@ def conference_call_api(conference_name):
         clid = request.form.get('clid', config.PLIVO_CALLER_ID)
         answer_url = url_for('conf', _external=True, conference_name=conference_name)
         plivo_conn = get_plivo_connection()
-        print "CLID: clid: %s" %  clid
-        print "to_number: \tonumber: %s" %  to_number
+        print "CLID:  %s" %  clid
+        print "to_number: %s" %  to_number
         status, _ = plivo_conn.make_call({'to': to_number, 'from': clid, 'answer_url': answer_url, 'answer_method': 'POST'})
         print "Status: %s\nResponse: %s" % (status, _)
         if status == 201:
