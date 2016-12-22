@@ -31,13 +31,13 @@ def index():
     return render_template('index.html')
 
 
-# @app.route("/create/")
-# @basic_auth.required
-# def create():
-    # """
-    # Creates a conference room and redirects to the page.
-    # """
-    # return render_template('create.html')
+@app.route("/create/")
+@basic_auth.required
+def create():
+    """
+    Creates a conference room and redirects to the page.
+    """
+    return render_template('create.html')
 
 
 @app.route('/response/conf/music/', methods=['GET', 'POST'])
